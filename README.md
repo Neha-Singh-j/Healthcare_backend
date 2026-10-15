@@ -1,176 +1,205 @@
-#  Healthcare Backend API
+# Healthcare Backend API
 
-A secure, modular, production-ready RESTful API for healthcare patient and doctor management, built with **Node.js**, **Express**, **PostgreSQL (Neon Cloud)**, and **Prisma ORM**.
+A RESTful healthcare backend built with **Node.js, Express.js, PostgreSQL (Neon), and Prisma ORM**. It provides JWT-based authentication, patient and doctor management, and patient-doctor assignment APIs.
 
----
+## Features
 
-##  Features
+- **Authentication:** User registration and login using JWT.
+- **Password Security:** Password hashing with `bcryptjs`.
+- **Patient Management:** Create, view, update, and delete patient records.
+- **Record Ownership:** Users can access only the patient records they own.
+- **Doctor Management:** Create, retrieve, update, and delete doctor records.
+- **Patient-Doctor Mapping:** Assign doctors to patients, view assignments, and remove mappings.
+- **Database Integrity:** PostgreSQL relationships and constraints managed through Prisma ORM.
+- **Modular Structure:** Separate routes, controllers, middleware, and database configuration.
+- **API Testing:** A Postman collection is included for testing endpoints.
 
-- **JWT Authentication**: Secure user registration & login with password hashing via `bcryptjs`.
-- **Role & Record Ownership Security**: Patients are scoped strictly to the authenticated user who created them.
-- **Doctor Management**: Full CRUD operations for medical doctor records.
-- **Patient-Doctor Mapping**: Assign doctors to patients, view assigned doctors per patient, and remove doctor assignments.
-- **Relational Integrity**: Foreign key and unique constraint enforcement backed by PostgreSQL & Prisma.
-- **Modular MVC Architecture**: Clean separation into `controllers`, `routes`, `middlewares`, `config`, and `utils`.
-- **Automated Test Suite**: End-to-end tests covering all endpoints and edge cases (`npm test`).
-- **Postman Ready**: Preconfigured collection file `Healthcare_API.postman_collection.json` included for one-click testing.
+## Project Structure
 
----
-
-##  Project Structure
-
-```
+```text
 HealthCare_Backend/
 ├── prisma/
-│   └── schema.prisma           # Prisma models (User, Patient, Doctor, PatientDoctorMapping)
+│   ├── schema.prisma
+│   └── migrations/
+├── generated/
+│   └── prisma/             # Generated Prisma Client
 ├── src/
 │   ├── config/
-│   │   ├── db.js               # Prisma client & PostgreSQL connection adapter
-│   │   └── env.js              # Environment variable loading & validation
+│   │   └── db.js
 │   ├── controllers/
-│   │   ├── authController.js   # User registration & login logic
-│   │   ├── patientController.js# Patient CRUD with creator ownership checks
-│   │   ├── doctorController.js # Doctor CRUD operations
-│   │   └── mappingController.js# Doctor-patient assignment & mapping logic
+│   │   ├── authController.js
+│   │   ├── patientController.js
+│   │   ├── doctorController.js
+│   │   └── mappingController.js
 │   ├── middlewares/
-│   │   ├── authMiddleware.js   # JWT token verification
-│   │   └── errorMiddleware.js  # 404 handler & centralized error handler
+│   │   └── authMiddleware.js
 │   ├── routes/
-│   │   ├── authRoutes.js       # /api/auth endpoints
-│   │   ├── patientRoutes.js    # /api/patients endpoints
-│   │   ├── doctorRoutes.js     # /api/doctors endpoints
-│   │   ├── mappingRoutes.js    # /api/mappings endpoints
-│   │   └── index.js            # Main route aggregator
-│   ├── utils/
-│   │   └── apiResponse.js      # Standardized JSON response helper
-│   └── app.js                  # Express app setup (CORS, parsers, routes)
-├── tests/
-│   └── test_api.js             # Automated E2E test suite (22 tests)
-├── Healthcare_API.postman_collection.json # Postman collection
-├── server.js                   # Application entry point & graceful shutdown
-├── package.json                # Project dependencies & npm scripts
-└── .env                        # Database URL, JWT secret, and server port
+│   │   ├── authRoutes.js
+│   │   ├── patientRoutes.js
+│   │   ├── doctorRoutes.js
+│   │   └── mappingRoutes.js
+│   ├── app.js
+│   └── server.js
+├── .env.example
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── prisma7.config.ts
+├── Healthcare_API.postman_collection.json
+└── README.md
 ```
 
----
+## Prerequisites
 
-##  Environment Configuration
+- Node.js and npm
+- A PostgreSQL database (Neon or a local PostgreSQL instance)
+- Postman (optional, for API testing)
 
-Ensure your `.env` file contains the following:
+## Environment Configuration
+
+Create a `.env` file in the project root:
 
 ```env
 PORT=5000
-DATABASE_URL="postgresql://<username>:<password>@<host>/<database>?sslmode=require"
-JWT_SECRET="your_secure_jwt_secret"
-JWT_EXPIRES_IN="24h"
+DATABASE_URL="your_postgresql_connection_string"
+JWT_SECRET="your_secure_secret"
+JWT_EXPIRES_IN="1d"
 ```
 
----
+Keep `.env` private and never commit credentials to GitHub. Use `.env.example` to document the required variables without real secrets.
 
-##  Quick Start
+## Getting Started
 
-### 1. Install Dependencies
+### 1. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 2. Generate Prisma Client & Sync Database
+### 2. Generate Prisma Client
+
 ```bash
-npm run prisma:generate
-npm run prisma:push
+npx prisma generate
 ```
 
-### 3. Start Development Server
+### 3. Apply database migrations
+
+If migrations already exist:
+
+```bash
+npx prisma migrate deploy
+```
+
+For local development when creating a new migration:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+Use the migration command appropriate to your current database setup. Do not run both commands blindly against an existing database.
+
+### 4. Start the development server
+
 ```bash
 npm run dev
 ```
 
-### 4. Run Automated Test Suite
-```bash
-npm test
+The API should be available at:
+
+`http://localhost:5000`
+
+Check the health endpoint, if configured:
+
+`GET http://localhost:5000/api/health`
+
+## API Endpoints
+
+Protected endpoints require this header:
+
+```http
+Authorization: Bearer <JWT_TOKEN>
 ```
 
----
+### 1. Authentication
 
-##  API Endpoints Reference
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register/` | Register a user |
+| POST | `/api/auth/login/` | Log in and receive a JWT |
 
-All endpoints accept standard JSON payloads and work seamlessly with or without trailing slashes.
+Registration request:
 
-### 1. Authentication APIs (`/api/auth`)
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/api/auth/register/` | Public | Register a new user (`name`, `email`, `password`) |
-| `POST` | `/api/auth/login/` | Public | Log in user and receive JWT token |
-
-#### Register Request Body:
 ```json
 {
-  "name": "Dr. John Watson",
+  "name": "John Watson",
   "email": "john.watson@example.com",
   "password": "password123"
 }
 ```
 
----
+Login request:
 
-### 2. Patient Management APIs (`/api/patients`)
-> **Note**: Requires `Authorization: Bearer <token>` header. Patients are strictly scoped to the creator.
-
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/api/patients/` | Private | Create a new patient |
-| `GET` | `/api/patients/` | Private | Retrieve all patients created by the authenticated user |
-| `GET` | `/api/patients/<id>/` | Private | Get details of a specific patient |
-| `PUT` | `/api/patients/<id>/` | Private | Update patient details |
-| `DELETE`| `/api/patients/<id>/` | Private | Delete a patient record |
-
-#### Create Patient Request Body:
 ```json
 {
-  "name": "Abc",
+  "email": "john.watson@example.com",
+  "password": "password123"
+}
+```
+
+### 2. Patients
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/patients/` | Create a patient |
+| GET | `/api/patients/` | List the authenticated user's patients |
+| GET | `/api/patients/:id/` | Retrieve a patient |
+| PUT | `/api/patients/:id/` | Update a patient |
+| DELETE | `/api/patients/:id/` | Delete a patient |
+
+Example request:
+
+```json
+{
+  "name": "Alex Morgan",
   "age": 32,
   "gender": "Female",
   "address": "Delhi",
-  "phone": "+91XXX7865432"
+  "phone": "+91XXXXXXXXXX"
 }
 ```
 
----
+### 3. Doctors
 
-### 3. Doctor Management APIs (`/api/doctors`)
-> **Note**: Requires `Authorization: Bearer <token>` header.
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/doctors/` | Create a doctor |
+| GET | `/api/doctors/` | List doctors |
+| GET | `/api/doctors/:id/` | Retrieve a doctor |
+| PUT | `/api/doctors/:id/` | Update a doctor |
+| DELETE | `/api/doctors/:id/` | Delete a doctor |
 
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/api/doctors/` | Private | Add a new doctor |
-| `GET` | `/api/doctors/` | Private | Retrieve all doctors |
-| `GET` | `/api/doctors/<id>/` | Private | Get details of a specific doctor |
-| `PUT` | `/api/doctors/<id>/` | Private | Update doctor details |
-| `DELETE`| `/api/doctors/<id>/` | Private | Delete a doctor record |
+Example request:
 
-#### Create Doctor Request Body:
 ```json
 {
-  "name": "Dr. Ns",
-  "specialty": "Diagnostic Medicine",
-  "email": "dr.bb@hospital.com",
-  "phone": "+91 XXX7654099"
+  "name": "Dr. Priya Sharma",
+  "specialty": "Cardiology",
+  "email": "priya.sharma@example.com",
+  "phone": "+91XXXXXXXXXX"
 }
 ```
 
----
+### 4. Patient-Doctor Mappings
 
-### 4. Patient-Doctor Mapping APIs (`/api/mappings`)
-> **Note**: Requires `Authorization: Bearer <token>` header.
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/mappings/` | Assign a doctor to a patient |
+| GET | `/api/mappings/` | List mappings |
+| GET | `/api/mappings/:patient_id/` | List doctors assigned to a patient |
+| DELETE | `/api/mappings/:id/` | Remove a mapping |
 
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/api/mappings/` | Private | Assign a doctor to a patient |
-| `GET` | `/api/mappings/` | Private | Retrieve all patient-doctor mappings |
-| `GET` | `/api/mappings/<patient_id>/` | Private | Get all doctors assigned to a specific patient |
-| `DELETE`| `/api/mappings/<id>/` | Private | Remove a doctor assignment (delete mapping by ID) |
+Example request:
 
-#### Assign Doctor Request Body:
 ```json
 {
   "patientId": 1,
@@ -178,12 +207,28 @@ All endpoints accept standard JSON payloads and work seamlessly with or without 
 }
 ```
 
----
+Use the actual patient and doctor IDs returned by your API.
 
 ## Testing with Postman
 
-1. Open **Postman**.
-2. Click **Import** (top left).
-3. Select the file `Healthcare_API.postman_collection.json` located in the project root.
-4. Execute **Register User** or **Login User**. The collection automatically stores the returned JWT token into the `{{token}}` variable.
-5. All subsequent requests (Patients, Doctors, Mappings) will automatically authenticate using this token!
+1. Start the backend server.
+2. Import `Healthcare_API.postman_collection.json` into Postman.
+3. Register a user or log in using an existing account.
+4. Copy the JWT from the response if it is not saved automatically.
+5. For protected requests, select **Authorization → Bearer Token** and provide the JWT.
+6. Test patient, doctor, and mapping endpoints.
+
+The collection's automatic token-saving script must match the actual login response structure. If your API returns `token` at the top level, the script must read that field rather than assuming `data.token`.
+
+## Security Notes
+
+- Store credentials in environment variables.
+- Hash passwords before saving them.
+- Verify JWTs on protected routes.
+- Enforce patient ownership checks in the backend.
+- Validate request data and return appropriate HTTP status codes.
+- Never commit `.env` or other files containing secrets.
+
+## License
+
+Add a license if you intend to distribute this project under specific reuse terms.
