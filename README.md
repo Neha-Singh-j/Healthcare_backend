@@ -22,19 +22,19 @@ A secure, modular, production-ready RESTful API for healthcare patient and docto
 ```
 HealthCare_Backend/
 ├── prisma/
-│   └── schema.prisma           # Prisma models (User, Patient, Doctor, PatientDoctorMapping)
+│   └── schema.prisma          
 ├── src/
 │   ├── config/
-│   │   ├── db.js               # Prisma client & PostgreSQL connection adapter
-│   │   └── env.js              # Environment variable loading & validation
+│   │   ├── db.js              
+│   │   └── env.js              
 │   ├── controllers/
-│   │   ├── authController.js   # User registration & login logic
-│   │   ├── patientController.js# Patient CRUD with creator ownership checks
-│   │   ├── doctorController.js # Doctor CRUD operations
-│   │   └── mappingController.js# Doctor-patient assignment & mapping logic
+│   │   ├── authController.js   
+│   │   ├── patientController.js
+│   │   ├── doctorController.js 
+│   │   └── mappingController.js
 │   ├── middlewares/
-│   │   ├── authMiddleware.js   # JWT token verification
-│   │   └── errorMiddleware.js  # 404 handler & centralized error handler
+│   │   ├── authMiddleware.js   
+│   │   └── errorMiddleware.js  
 │   ├── routes/
 │   │   ├── authRoutes.js       # /api/auth endpoints
 │   │   ├── patientRoutes.js    # /api/patients endpoints
@@ -42,14 +42,14 @@ HealthCare_Backend/
 │   │   ├── mappingRoutes.js    # /api/mappings endpoints
 │   │   └── index.js            # Main route aggregator
 │   ├── utils/
-│   │   └── apiResponse.js      # Standardized JSON response helper
-│   └── app.js                  # Express app setup (CORS, parsers, routes)
+│   │   └── apiResponse.js      
+│   └── app.js                  
 ├── tests/
-│   └── test_api.js             # Automated E2E test suite (22 tests)
-├── Healthcare_API.postman_collection.json # Postman collection
-├── server.js                   # Application entry point & graceful shutdown
-├── package.json                # Project dependencies & npm scripts
-└── .env                        # Database URL, JWT secret, and server port
+│   └── test_api.js            
+├── Healthcare_API.postman_collection.json
+├── server.js                  
+├── package.json               
+└── .env                        
 ```
 
 ---
