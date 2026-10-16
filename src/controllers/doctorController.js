@@ -3,10 +3,8 @@ const { sendSuccess, sendError } = require('../utils/apiResponse');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/**
- * Add a new doctor (Authenticated users only)
- * POST /api/doctors
- */
+//  Add a new doctor (Authenticated users only)
+ 
 const createDoctor = async (req, res, next) => {
   try {
     const { name, specialty, email, phone } = req.body;
@@ -46,10 +44,7 @@ const createDoctor = async (req, res, next) => {
   }
 };
 
-/**
- * Retrieve all doctors
- * GET /api/doctors
- */
+// get all doctors 
 const getAllDoctors = async (req, res, next) => {
   try {
     const doctors = await prisma.doctor.findMany({
@@ -72,10 +67,9 @@ const getAllDoctors = async (req, res, next) => {
   }
 };
 
-/**
- * Get details of a specific doctor
- * GET /api/doctors/:id
- */
+
+// Get details of a specific doctor
+
 const getDoctorById = async (req, res, next) => {
   try {
     const doctorId = parseInt(req.params.id, 10);
@@ -115,10 +109,9 @@ const getDoctorById = async (req, res, next) => {
   }
 };
 
-/**
- * Update doctor details
- * PUT /api/doctors/:id
- */
+
+//  Update doctor details
+ //PUT /api/doctors/:id
 const updateDoctor = async (req, res, next) => {
   try {
     const doctorId = parseInt(req.params.id, 10);
@@ -189,10 +182,9 @@ const updateDoctor = async (req, res, next) => {
   }
 };
 
-/**
- * Delete a doctor record
- * DELETE /api/doctors/:id
- */
+//Delete a doctor record
+//DELETE /api/doctors/:id
+
 const deleteDoctor = async (req, res, next) => {
   try {
     const doctorId = parseInt(req.params.id, 10);

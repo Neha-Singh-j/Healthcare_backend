@@ -53,7 +53,7 @@ HealthCare_Backend/
 
 - Node.js and npm
 - A PostgreSQL database (Neon or a local PostgreSQL instance)
-- Postman (optional, for API testing)
+- Postman (for API testing)
 
 ## Environment Configuration
 
@@ -209,6 +209,9 @@ Example request:
 
 Use the actual patient and doctor IDs returned by your API.
 
+## Error Handling & HTTP Status Codes:
+ Implements appropriate HTTP status codes such as `200 OK`, `201 Created`, `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, and `500 Internal Server Error` for consistent API responses and error handling.
+
 ## Testing with Postman
 
 1. Start the backend server.
@@ -219,16 +222,3 @@ Use the actual patient and doctor IDs returned by your API.
 6. Test patient, doctor, and mapping endpoints.
 
 The collection's automatic token-saving script must match the actual login response structure. If your API returns `token` at the top level, the script must read that field rather than assuming `data.token`.
-
-## Security Notes
-
-- Store credentials in environment variables.
-- Hash passwords before saving them.
-- Verify JWTs on protected routes.
-- Enforce patient ownership checks in the backend.
-- Validate request data and return appropriate HTTP status codes.
-- Never commit `.env` or other files containing secrets.
-
-## License
-
-Add a license if you intend to distribute this project under specific reuse terms.

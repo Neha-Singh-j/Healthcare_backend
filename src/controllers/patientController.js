@@ -1,10 +1,9 @@
 const prisma = require('../config/db');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 
-/**
- * Add a new patient (Authenticated users only)
- * POST /api/patients
- */
+// Add a new patient (Authenticated users only)
+// POST /api/patients
+
 const createPatient = async (req, res, next) => {
   try {
     const { name, age, gender, address, phone } = req.body;
@@ -38,10 +37,10 @@ const createPatient = async (req, res, next) => {
   }
 };
 
-/**
- * Retrieve all patients created by the authenticated user
- * GET /api/patients
- */
+
+ //Retrieve all patients created by the authenticated user
+ //GET /api/patients
+
 const getAllPatients = async (req, res, next) => {
   try {
     const patients = await prisma.patient.findMany({
@@ -127,10 +126,10 @@ const getPatientById = async (req, res, next) => {
   }
 };
 
-/**
- * Update patient details
- * PUT /api/patients/:id
- */
+
+ // Update patient details
+ // PUT /api/patients/:id
+
 const updatePatient = async (req, res, next) => {
   try {
     const patientId = parseInt(req.params.id, 10);
@@ -198,10 +197,9 @@ const updatePatient = async (req, res, next) => {
   }
 };
 
-/**
- * Delete a patient record
- * DELETE /api/patients/:id
- */
+// Delete a patient record
+ // DELETE /api/patients/:id
+
 const deletePatient = async (req, res, next) => {
   try {
     const patientId = parseInt(req.params.id, 10);

@@ -7,10 +7,6 @@ const { sendSuccess, sendError } = require('../utils/apiResponse');
 // Email regex pattern for validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/**
- * Register a new user
- * POST /api/auth/register
- */
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
