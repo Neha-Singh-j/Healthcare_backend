@@ -1,4 +1,4 @@
-# Healthcare Backend API
+# Healthcare Backend 
 
 A RESTful healthcare backend built with **Node.js, Express.js, PostgreSQL (Neon), and Prisma ORM**. It provides JWT-based authentication, patient and doctor management, and patient-doctor assignment APIs.
 
@@ -222,3 +222,15 @@ Use the actual patient and doctor IDs returned by your API.
 6. Test patient, doctor, and mapping endpoints.
 
 The collection's automatic token-saving script must match the actual login response structure. If your API returns `token` at the top level, the script must read that field rather than assuming `data.token`.
+
+
+## Security Notes
+
+- Store credentials in environment variables.
+- Hash passwords before saving them.
+- Verify JWTs on protected routes.
+- Enforce patient ownership checks in the backend.
+- Validate request data and return appropriate HTTP status codes.
+- Never commit `.env` or other files containing secrets.
+ ```
+By:Neha Singh
