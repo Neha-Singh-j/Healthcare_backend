@@ -1,4 +1,4 @@
-# Healthcare Backend API
+# Healthcare Backend 
 
 A RESTful healthcare backend built with **Node.js, Express.js, PostgreSQL (Neon), and Prisma ORM**. It provides JWT-based authentication, patient and doctor management, and patient-doctor assignment APIs.
 
@@ -228,7 +228,5 @@ The collection's automatic token-saving script must match the actual login respo
 - Enforce patient ownership checks in the backend.
 - Validate request data and return appropriate HTTP status codes.
 - Never commit `.env` or other files containing secrets.
-
-## License
-
-Add a license if you intend to distribute this project under specific reuse terms.
+ ```
+By:Neha Singh
